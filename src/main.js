@@ -1,6 +1,6 @@
 import getCard from '../src/get-card';
 import getFilter from '../src/get-filter';
-import {getIntervalNum, getNewArray, getCleanContainer, renderElement} from '../src/utils';
+import {getNewArray, getCleanContainer, renderElement} from '../src/utils';
 
 const FILTERS_CONTAINER = document.querySelector(`.main__filter`);
 const TASKS_CONTAINER = document.querySelector(`.board__tasks`);

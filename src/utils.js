@@ -14,4 +14,4 @@ const renderElement = (container, element) => {
   container.insertAdjacentHTML(`beforeEnd`, element);
 };
 
-export {getIntervalNum, getNewArray, getCleanContainer, renderElement};
+export {getNewArray, getCleanContainer, renderElement};
