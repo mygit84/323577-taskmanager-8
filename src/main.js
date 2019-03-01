@@ -1,4 +1,4 @@
-import arrayObjectsTasks from '../src/data';
+import arrayObjectsTask from '../src/data';
 import getTask from '../src/get-card';
 import getFilter from '../src/get-filter';
 import {getNewArray, getCleanContainer, renderElement} from '../src/utils';
@@ -61,7 +61,7 @@ const getArrayFiltersButton = () => {
 const getFilterButtonClickHandler = (element, i) => {
   element[i].addEventListener(`click`, () => {
     getCleanContainer(TASKS_CONTAINER);
-    drawCards(getNewArray(arrayObjectsTasks()));
+    drawCards(getNewArray(arrayObjectsTask()));
   });
 };
 
@@ -75,7 +75,7 @@ const onClickFilterButton = () => {
 
 const setElements = () => {
   drawFilters(FILTERS);
-  drawCards(arrayObjectsTasks());
+  drawCards(arrayObjectsTask());
 };
 
 setElements();

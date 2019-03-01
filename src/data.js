@@ -10,7 +10,7 @@ const SECONDS_PER_MINUTE = 60;
 const MILLISECONDS_PER_SECOND = 1000;
 const MIN_NUMBER_TAGS = 0;
 const MAX_NUMBER_TAGS = 3;
-const TITLE = [
+const TITLES = [
   `Изучить теорию`,
   `Сделать домашку`,
   `Пройти интенсив на соточку`];
@@ -62,7 +62,7 @@ const getLengthArrayHasntags = () => {
 const getNewArrayHashtags = () => HASNTAGS.sort(getRandomArray).slice(0, getLengthArrayHasntags());
 
 const getObjectTask = () => ({
-  title: getRandomElement(TITLE),
+  title: getRandomElement(TITLES),
   dueDate: convertDate(),
   tags: getNewArrayHashtags(),
   picture: `http://picsum.photos/100/100?r=${Math.random()}`,
@@ -80,7 +80,7 @@ const getObjectTask = () => ({
   isDone: getRandomBoolean()
 });
 
-export default () => {
+const getArrayObjectsTask = () => {
   const tasks = [];
 
   for (let i = 0; i < MAX_NUMBER_TASKS; i++) {
@@ -88,4 +88,11 @@ export default () => {
   }
 
   return tasks;
+};
+
+
+export default () => {
+  const arrayObjectsTask = getArrayObjectsTask();
+
+  return arrayObjectsTask;
 };
