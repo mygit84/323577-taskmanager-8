@@ -1,3 +1,9 @@
+const getRandomArray = () => Math.random() - 0.5;
+
+const getRandomBoolean = () => Boolean(Math.floor(Math.random() * 2));
+
+const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
 const getIntervalNum = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 
 const getNewArray = (arr) => {
@@ -14,4 +20,5 @@ const renderElement = (container, element) => {
   container.insertAdjacentHTML(`beforeEnd`, element);
 };
 
-export {getNewArray, getCleanContainer, renderElement};
+
+export {getRandomArray, getRandomBoolean, getNewArray, getRandomElement, getIntervalNum, getCleanContainer, renderElement};
