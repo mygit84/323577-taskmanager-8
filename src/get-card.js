@@ -1,17 +1,48 @@
-export default (color, text, isHashtag = false, isDate = false, isImage = false) => {
-  return `<article class="card ${color}">
+export default (task, index) => {
+  const isRepeatingTask = Object.values(task.repeatingDays).some((item) => item);
+
+  const repeatingClass = isRepeatingTask ? ` card--repeat` : ``;
+
+  const hasntags = [...task.tags].map((element) =>
+    `<span class="card__hashtag-inner">
+        <input
+          type="hidden"
+          name="hashtag"
+          value="${element}"
+          class="card__hashtag-hidden-input"/>
+        <button type="button" class="card__hashtag-name">
+          #${element}
+        </button>
+        <button type="button" class="card__hashtag-delete">
+          delete
+        </button>
+      </span>`).join(``);
+
+  const days = Object.keys(task.repeatingDays).map((element) =>
+    `<input
+      class="visually-hidden card__repeat-day-input"
+      type="checkbox"
+      id="repeat-${element}-${index}"
+      name="repeat"
+      value="mo"/>
+    <label class="card__repeat-day" for="repeat-${element}-${index}">
+      ${element}
+    </label>`)
+  .join(``);
+
+  return `<article class="card card--${task.color} ${repeatingClass}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
           <button type="button" class="card__btn card__btn--edit">
             edit
           </button>
-          <button type="button" class="card__btn card__btn--archive">
+          <button type="button" class="card__btn ${task.isDone ? `card__btn--archive` : ``}">
             archive
           </button>
           <button
             type="button"
-            class="card__btn card__btn--favorites card__btn--disabled">
+            class="card__btn card__btn--favorites ${task.isFavorite ? `` : `card__btn--disabled`}">
             favorites
           </button>
         </div>
@@ -27,7 +58,7 @@ export default (color, text, isHashtag = false, isDate = false, isImage = false)
             <textarea
               class="card__text"
               placeholder="Start typing your text here..."
-              name="text">${text}
+              name="text">${task.title}
             </textarea>
           </label>
         </div>
@@ -39,14 +70,14 @@ export default (color, text, isHashtag = false, isDate = false, isImage = false)
                 date: <span class="card__date-status">no</span>
               </button>
 
-              <fieldset class="card__date-deadline"
-              ${!isDate ? `disabled` : ``}>
+              <fieldset class="card__date-deadline">
                 <label class="card__input-deadline-wrap">
                   <input
                     class="card__date"
                     type="text"
                     placeholder="23 September"
                     name="date"
+                    value="${task.dueDate}"
                   />
                 </label>
                 <label class="card__input-deadline-wrap">
@@ -60,134 +91,19 @@ export default (color, text, isHashtag = false, isDate = false, isImage = false)
               </fieldset>
 
               <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">no</span>
+                repeat:<span class="card__repeat-status">${isRepeatingTask ? `yes` : `no`}</span>
               </button>
 
               <fieldset class="card__repeat-days" disabled>
                 <div class="card__repeat-days-inner">
-                  <input
-                    class="visually-hidden card__repeat-day-input"
-                    type="checkbox"
-                    id="repeat-mo-1"
-                    name="repeat"
-                    value="mo"
-                  />
-                  <label class="card__repeat-day" for="repeat-mo-1">
-                    mo
-                  </label>
-                  <input
-                    class="visually-hidden card__repeat-day-input"
-                    type="checkbox"
-                    id="repeat-tu-1"
-                    name="repeat"
-                    value="tu"
-                    checked
-                  />
-                  <label class="card__repeat-day" for="repeat-tu-1">
-                    tu
-                  </label>
-                  <input
-                    class="visually-hidden card__repeat-day-input"
-                    type="checkbox"
-                    id="repeat-we-1"
-                    name="repeat"
-                    value="we"
-                  />
-                  <label class="card__repeat-day" for="repeat-we-1">
-                    we
-                  </label>
-                  <input
-                    class="visually-hidden card__repeat-day-input"
-                    type="checkbox"
-                    id="repeat-th-1"
-                    name="repeat"
-                    value="th"
-                  />
-                  <label class="card__repeat-day" for="repeat-th-1">
-                    th
-                  </label>
-                  <input
-                    class="visually-hidden card__repeat-day-input"
-                    type="checkbox"
-                    id="repeat-fr-1"
-                    name="repeat"
-                    value="fr"
-                    checked
-                  />
-                  <label class="card__repeat-day" for="repeat-fr-1">
-                    fr
-                  </label>
-                  <input
-                    class="visually-hidden card__repeat-day-input"
-                    type="checkbox"
-                    name="repeat"
-                    value="sa"
-                    id="repeat-sa-1"
-                  />
-                  <label class="card__repeat-day" for="repeat-sa-1">
-                    sa
-                  </label>
-                  <input
-                    class="visually-hidden card__repeat-day-input"
-                    type="checkbox"
-                    id="repeat-su-1"
-                    name="repeat"
-                    value="su"
-                    checked
-                  />
-                  <label class="card__repeat-day" for="repeat-su-1">
-                    su
-                  </label>
+                ${days}
                 </div>
               </fieldset>
             </div>
 
             <div class="card__hashtag">
               <div class="card__hashtag-list">
-                ${isHashtag ? `  <span class="card__hashtag-inner">
-                    <input
-                      type="hidden"
-                      name="hashtag"
-                      value="repeat"
-                      class="card__hashtag-hidden-input"
-                    />
-                    <button type="button" class="card__hashtag-name">
-                      #repeat
-                    </button>
-                    <button type="button" class="card__hashtag-delete">
-                      delete
-                    </button>
-                  </span>
-
-                  <span class="card__hashtag-inner">
-                    <input
-                      type="hidden"
-                      name="hashtag"
-                      value="repeat"
-                      class="card__hashtag-hidden-input"
-                    />
-                    <button type="button" class="card__hashtag-name">
-                      #cinema
-                    </button>
-                    <button type="button" class="card__hashtag-delete">
-                      delete
-                    </button>
-                  </span>
-
-                  <span class="card__hashtag-inner">
-                    <input
-                      type="hidden"
-                      name="hashtag"
-                      value="repeat"
-                      class="card__hashtag-hidden-input"
-                    />
-                    <button type="button" class="card__hashtag-name">
-                      #entertaiment
-                    </button>
-                    <button type="button" class="card__hashtag-delete">
-                      delete
-                    </button>
-                  </span>` : ``}
+                ${hasntags}
               </div>
 
               <label>
@@ -201,13 +117,13 @@ export default (color, text, isHashtag = false, isDate = false, isImage = false)
             </div>
           </div>
 
-          <label class="card__img-wrap ${!isImage ? `card__img-wrap--empty` : ``}">
+          <label class="card__img-wrap card__img-wrap--empty">
             <input
               class="card__img-input visually-hidden"
               name="img"
             />
             <img
-              src="${!isImage ? `img/add-photo.svg` : `img/sample-img.jpg`}"
+              src="${task.picture}"
               alt="task picture"
               class="card__img"
             />
@@ -218,54 +134,14 @@ export default (color, text, isHashtag = false, isDate = false, isImage = false)
             <div class="card__colors-wrap">
               <input
                 type="radio"
-                id="color-black-1"
+                id="color-${task.color}-${index}"
                 class="card__color-input card__color-input--black visually-hidden"
                 name="color"
                 value="black"
                 checked
               />
-              <label for="color-black-1" class="card__color card__color--black">
-                black
-              </label>
-              <input
-                type="radio"
-                id="color-yellow-1"
-                class="card__color-input card__color-input--yellow visually-hidden"
-                name="color"
-                value="yellow"
-              />
-              <label for="color-yellow-1" class="card__color card__color--yellow">
-                yellow
-              </label>
-              <input
-                type="radio"
-                id="color-blue-1"
-                class="card__color-input card__color-input--blue visually-hidden"
-                name="color"
-                value="blue"
-              />
-              <label for="color-blue-1" class="card__color card__color--blue">
-                blue
-              </label>
-              <input
-                type="radio"
-                id="color-green-1"
-                class="card__color-input card__color-input--green visually-hidden"
-                name="color"
-                value="green"
-              />
-              <label for="color-green-1" class="card__color card__color--green">
-                green
-              </label>
-              <input
-                type="radio"
-                id="color-pink-1"
-                class="card__color-input card__color-input--pink visually-hidden"
-                name="color"
-                value="pink"
-              />
-              <label for="color-pink-1" class="card__color card__color--pink">
-                pink
+              <label for="color-${task.color}-${index}" class="card__color card__color--${task.color}">
+                ${task.color}
               </label>
             </div>
           </div>
