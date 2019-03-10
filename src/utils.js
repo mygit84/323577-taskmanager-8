@@ -20,5 +20,11 @@ const renderElement = (container, element) => {
   container.insertAdjacentHTML(`beforeEnd`, element);
 };
 
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
 
-export {getRandomArray, getRandomBoolean, getNewArray, getRandomElement, getIntervalNum, getCleanContainer, renderElement};
+
+export {getRandomArray, getRandomBoolean, getNewArray, getRandomElement, getIntervalNum, getCleanContainer, renderElement, createElement};

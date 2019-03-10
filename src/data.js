@@ -91,8 +91,4 @@ const getArrayObjectsTask = () => {
 };
 
 
-export default () => {
-  const arrayObjectsTask = getArrayObjectsTask();
-
-  return arrayObjectsTask;
-};
+export {getArrayObjectsTask, COLORS};
