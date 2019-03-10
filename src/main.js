@@ -1,6 +1,7 @@
-import arrayObjectsTask from '../src/data';
-import getTask from '../src/get-card';
+import {getArrayObjectsTask} from '../src/data';
 import getFilter from '../src/get-filter';
+import Task from '../src/task';
+import TaskEdit from '../src/task-edit';
 import {getNewArray, getCleanContainer, renderElement} from '../src/utils';
 
 
@@ -41,9 +42,21 @@ const FILTERS = [
 ];
 
 
-const drawCards = (arr) => {
-  arr.forEach((item, i) => {
-    renderElement(TASKS_CONTAINER, getTask(item, i));
+const drawTasks = (arr) => {
+  arr.forEach((item) => {
+    const taskComponent = new Task(item);
+    const editTaskComponent = new TaskEdit(item);
+    const taskElement = taskComponent.render();
+    const editTaskElement = editTaskComponent.render();
+
+    taskComponent.onEdit = () => {
+      TASKS_CONTAINER.replaceChild(editTaskElement, taskElement);
+
+      editTaskComponent.onSubmit = () => {
+        TASKS_CONTAINER.replaceChild(taskElement, editTaskElement);
+      };
+    };
+    TASKS_CONTAINER.appendChild(taskElement);
   });
 };
 
@@ -61,7 +74,7 @@ const getArrayFiltersButton = () => {
 const getFilterButtonClickHandler = (element, i) => {
   element[i].addEventListener(`click`, () => {
     getCleanContainer(TASKS_CONTAINER);
-    drawCards(getNewArray(arrayObjectsTask()));
+    drawTasks(getNewArray(getArrayObjectsTask()));
   });
 };
 
@@ -75,7 +88,7 @@ const onClickFilterButton = () => {
 
 const setElements = () => {
   drawFilters(FILTERS);
-  drawCards(arrayObjectsTask());
+  drawTasks(getArrayObjectsTask());
 };
 
 setElements();
