@@ -40,12 +40,12 @@ export default class TaskEdit {
 
   bind() {
     this._element.querySelector(`.card__form`)
-      .addEventListener(`click`, this.__onSubmitButtonClick.bind(this));
+      .addEventListener(`submit`, this.__onSubmitButtonClick.bind(this));
   }
 
   unbind() {
     this._element.querySelector(`.card__form`)
-      .removeEventListener(`click`, this.__onSubmitButtonClick);
+      .removeEventListener(`submit`, this.__onSubmitButtonClick);
   }
 
   render() {

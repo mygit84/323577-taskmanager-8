@@ -129,15 +129,15 @@ const getTaskImage = (picture) => {
   </label>`;
 };
 
-const getColorsInput = () => {
+const getColorsInput = (color) => {
   return COLORS.map((item) =>
     `<input
       type="radio"
       id="color-${item}"
-      class="card__color-input card__color-input--black visually-hidden"
+      class="card__color-input card__color-input--${item} visually-hidden"
       name="color"
       value="${item}"
-      checked
+      ${(item === color) ? `checked` : ``}
     />
     <label for="color-${item}" class="card__color card__color--${item}">
       ${item}
@@ -236,7 +236,7 @@ const getEditTaskTemplate = (color, isFavorite, isDone, repeatingDays, title, du
           <div class="card__colors-inner">
             <h3 class="card__colors-title">Color</h3>
             <div class="card__colors-wrap">
-              ${getColorsInput()}
+              ${getColorsInput(color)}
             </div>
           </div>
         </div>

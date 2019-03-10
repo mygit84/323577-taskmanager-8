@@ -43,20 +43,23 @@ const FILTERS = [
 
 
 const drawTasks = (arr) => {
-  arr.forEach((item) => {
+  arr.forEach((item, i) => {
     const taskComponent = new Task(item);
-    const editTaskComponent = new TaskEdit(item);
+    const editTaskComponent = new TaskEdit(item, i);
     const taskElement = taskComponent.render();
     const editTaskElement = editTaskComponent.render();
 
+    TASKS_CONTAINER.appendChild(taskElement);
+
     taskComponent.onEdit = () => {
       TASKS_CONTAINER.replaceChild(editTaskElement, taskElement);
-
-      editTaskComponent.onSubmit = () => {
-        TASKS_CONTAINER.replaceChild(taskElement, editTaskElement);
-      };
+      taskComponent.unrender();
     };
-    TASKS_CONTAINER.appendChild(taskElement);
+
+    editTaskComponent.onSubmit = () => {
+      TASKS_CONTAINER.replaceChild(taskElement, editTaskElement);
+      editTaskComponent.unrender();
+    };
   });
 };
 
