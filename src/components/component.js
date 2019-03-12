@@ -7,9 +7,7 @@ class Component {
       throw new Error(`Can't instantiate BaseComponent, only concrete one.`);
     }
 
-    this._state = {
-
-    };
+    this._state = {};
 
     this._element = null;
   }

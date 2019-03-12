@@ -12,6 +12,11 @@ export default class Task extends Component {
     this._color = data.color;
     this._repeatingDays = data.repeatingDays;
 
+    this._state = {
+      isDone: data.isDone,
+      isFavorite: data.isFavorite
+    };
+
     this._onEdit = null;
   }
 
