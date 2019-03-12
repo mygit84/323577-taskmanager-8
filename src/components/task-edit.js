@@ -1,9 +1,10 @@
-import {getEditTaskTemplate} from '../src/get-template';
-import {createElement} from '../src/utils';
+import {getEditTaskTemplate} from '../templates/task-templates';
+import {Component} from './component';
 
 
-export default class TaskEdit {
+export default class TaskEdit extends Component {
   constructor(data) {
+    super();
     this._title = data.title;
     this._dueDate = data.dueDate;
     this._tags = data.tags;
@@ -11,12 +12,6 @@ export default class TaskEdit {
     this._color = data.color;
     this._repeatingDays = data.repeatingDays;
 
-    this._state = {
-      isDone: data.isDone,
-      isFavorite: data.isFavorite
-    };
-
-    this._element = null;
     this._onSubmit = null;
   }
 
@@ -28,10 +23,6 @@ export default class TaskEdit {
 
   set onSubmit(fn) {
     this._onSubmit = fn;
-  }
-
-  get element() {
-    return this._element;
   }
 
   get template() {
@@ -46,17 +37,5 @@ export default class TaskEdit {
   unbind() {
     this._element.querySelector(`.card__form`)
       .removeEventListener(`submit`, this.__onSubmitButtonClick);
-  }
-
-  render() {
-    this._element = createElement(this.template);
-    this.bind();
-
-    return this._element;
-  }
-
-  unrender() {
-    this.unbind();
-    this._element = null;
   }
 }

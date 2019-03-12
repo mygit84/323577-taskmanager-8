@@ -1,4 +1,4 @@
-import {COLORS} from '../src/data';
+import {COLORS} from '../data';
 
 const CONTROLS = [`edit`, `archive`, `favorites`];
 
