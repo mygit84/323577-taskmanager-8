@@ -1,7 +1,7 @@
 import {getArrayObjectsTask} from '../src/data';
-import getFilter from '../src/get-filter';
-import Task from '../src/task';
-import TaskEdit from '../src/task-edit';
+import getFilter from '../src/templates/filter-template';
+import Task from '../src/components/task';
+import TaskEdit from '../src/components/task-edit';
 import {getNewArray, getCleanContainer, renderElement} from '../src/utils';
 
 
