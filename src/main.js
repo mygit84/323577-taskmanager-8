@@ -46,18 +46,24 @@ const drawTasks = (arr) => {
   arr.forEach((item, i) => {
     const taskComponent = new Task(item);
     const editTaskComponent = new TaskEdit(item, i);
-    const taskElement = taskComponent.render();
-    const editTaskElement = editTaskComponent.render();
 
-    TASKS_CONTAINER.appendChild(taskElement);
+    TASKS_CONTAINER.appendChild(taskComponent.render());
 
     taskComponent.onEdit = () => {
-      TASKS_CONTAINER.replaceChild(editTaskElement, taskElement);
+      editTaskComponent.render();
+      TASKS_CONTAINER.replaceChild(editTaskComponent.element, taskComponent.element);
       taskComponent.unrender();
     };
 
-    editTaskComponent.onSubmit = () => {
-      TASKS_CONTAINER.replaceChild(taskElement, editTaskElement);
+    editTaskComponent.onSubmit = (newObject) => {
+      item.title = newObject.title;
+      item.tags = newObject.tags;
+      item.color = newObject.color;
+      item.repeatingDays = newObject.repeatingDays;
+      item.dueDate = newObject.dueDate;
+      taskComponent.update(item);
+      taskComponent.render();
+      TASKS_CONTAINER.replaceChild(taskComponent.element, editTaskComponent.element);
       editTaskComponent.unrender();
     };
   });

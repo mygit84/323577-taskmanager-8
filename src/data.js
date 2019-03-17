@@ -1,13 +1,11 @@
 import {getRandomArray, getRandomElement, getIntervalNum, getRandomBoolean} from '../src/utils';
 
 
+const moment = require(`moment`);
+
+
 const MAX_NUMBER_TASKS = 7;
-const NUMBER_WEEK = 1;
-const DAY_PER_WEEK = 7;
-const HOUR_PER_DAY = 24;
-const MINUTES_PER_HOUR = 60;
-const SECONDS_PER_MINUTE = 60;
-const MILLISECONDS_PER_SECOND = 1000;
+const MILLISECONDS_IN_WEEK = 7 * 24 * 60 * 60 * 1000;
 const MIN_NUMBER_TAGS = 0;
 const MAX_NUMBER_TAGS = 3;
 const TITLES = [
@@ -35,22 +33,10 @@ const COLORS = [
 
 
 const getRandomDate = () => {
-  const millisecomdInWeek = NUMBER_WEEK * DAY_PER_WEEK * HOUR_PER_DAY * MINUTES_PER_HOUR
-   * SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND;
-  const minDate = Date.now() - millisecomdInWeek;
-  const maxDate = Date.now() + millisecomdInWeek;
-  const newRandomDate = getIntervalNum(minDate, maxDate);
+  const minDate = Date.now() - MILLISECONDS_IN_WEEK;
+  const maxDate = Date.now() + MILLISECONDS_IN_WEEK;
 
-  return newRandomDate;
-};
-
-const convertDate = () => {
-  const date = new Date();
-
-  date.setTime(getRandomDate());
-
-  return (`0` + date.getDate()).slice(-2) + `.` + (`0` + (date.getMonth() + 1))
-  .slice(-2) + `.` + date.getFullYear();
+  return moment(getIntervalNum(minDate, maxDate)).format(`DD.MM.YYYY h:mm`);
 };
 
 const getLengthArrayHasntags = () => {
@@ -63,7 +49,7 @@ const getNewArrayHashtags = () => HASNTAGS.sort(getRandomArray).slice(0, getLeng
 
 const getObjectTask = () => ({
   title: getRandomElement(TITLES),
-  dueDate: convertDate(),
+  dueDate: getRandomDate(),
   tags: getNewArrayHashtags(),
   picture: `http://picsum.photos/100/100?r=${Math.random()}`,
   color: getRandomElement(COLORS),

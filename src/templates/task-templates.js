@@ -1,5 +1,7 @@
 import {COLORS} from '../data';
 
+
+const moment = require(`moment`);
 const CONTROLS = [`edit`, `archive`, `favorites`];
 
 const getButtonControl = (value, isFavorite, isDone) => {
@@ -35,10 +37,18 @@ const getTextArea = (title) => {
   </label>`;
 };
 
-const getDateDeadlineButton = () => {
+const getDateDeadlineButton = (isDate) => {
   return `<button class="card__date-deadline-toggle disabled" type="button">
-      date: <span class="card__date-status">no</span>
-    </button>`;
+    date: <span class="card__date-status">${isDate ? `yes` : `no`}</span>
+  </button>`;
+};
+
+const getDate = (dueDate) => {
+  return `${moment(dueDate, `DD.MM.YYYY hh:mm`).format(`D MMMM`)}`;
+};
+
+const getTime = (dueDate) => {
+  return `${moment(dueDate, `DD.MM.YYYY h:mm`).format(`h:mm A`)}`;
 };
 
 const getDateDeadlineFieldset = (dueDate) => {
@@ -46,45 +56,46 @@ const getDateDeadlineFieldset = (dueDate) => {
     <input
       class="card__date"
       type="text"
-      placeholder="23 September"
+      placeholder="${getDate(dueDate)}"
       name="date"
-      value="${dueDate}"
+      value = "${getDate(dueDate)}"
     />
   </label>
   <label class="card__input-deadline-wrap">
     <input
       class="card__time"
       type="text"
-      placeholder="11:15 PM"
+      placeholder="${getTime(dueDate)}"
       name="time"
+      value = "${getTime(dueDate)}"
     />
   </label>`;
 };
 
-const getRepeatToggleButton = () => {
+const getIsRepeatedTask = (repeatingDays) => {
+  return Object.values(repeatingDays).some((it) => it === true);
+};
+
+const getRepeatToggleButton = (isRepeated) => {
   return `<button class="card__repeat-toggle" type="button">
-    repeat:<span class="card__repeat-status">no</span>
+    repeat:<span class="card__repeat-status">${isRepeated ? `yes` : `no`}</span>
   </button>`;
 };
 
-const getRepeatingClass = (repeatingDays) => {
-  const isRepeatingTask = Object.values(repeatingDays).some((item) => item);
-  const repeatingClass = isRepeatingTask ? ` card--repeat` : ``;
-
-  return repeatingClass;
-};
-
-const getRepeatingDaysControls = (repeatingDays) => {
+const getRepeatingDaysControls = (repeatingDays, index) => {
   return Object.keys(repeatingDays).map((element) =>
     `<input
       class="visually-hidden card__repeat-day-input"
       type="checkbox"
-      id="repeat-${element}"
+      id="repeat-${element}-${index}"
       name="repeat"
-      value="${element}"/>
-    <label class="card__repeat-day" for="repeat-${element}">
+      value="${element}"
+      ${repeatingDays[element] ? `checked` : ``}
+    />
+    <label class="card__repeat-day" for="repeat-${element}-${index}">
       ${element}
-    </label>`).join(``);
+    </label>`)
+  .join(``);
 };
 
 const getHashtags = (tags) => {
@@ -129,17 +140,17 @@ const getTaskImage = (picture) => {
   </label>`;
 };
 
-const getColorsInput = (color) => {
+const getColorsInput = (color, index) => {
   return COLORS.map((item) =>
     `<input
       type="radio"
-      id="color-${item}"
+      id="color-${item}-${index}"
       class="card__color-input card__color-input--${item} visually-hidden"
       name="color"
       value="${item}"
       ${(item === color) ? `checked` : ``}
     />
-    <label for="color-${item}" class="card__color card__color--${item}">
+    <label for="color-${item}-${index}" class="card__color card__color--${item}">
       ${item}
     </label>`).join(``);
 };
@@ -152,7 +163,7 @@ const getTaskStatusButton = () => {
 };
 
 const getTaskTemplate = (color, isFavorite, isDone, repeatingDays, title, dueDate, tags, picture) => {
-  return `<article class="card card--${color} ${getRepeatingClass(repeatingDays)}">
+  return `<article class="card card--${color} ${getIsRepeatedTask(repeatingDays) ? ` card--repeat` : ``}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -189,8 +200,8 @@ const getTaskTemplate = (color, isFavorite, isDone, repeatingDays, title, dueDat
   </article>`;
 };
 
-const getEditTaskTemplate = (color, isFavorite, isDone, repeatingDays, title, dueDate, tags, picture) => {
-  return `<article class="card card--edit card--${color} ${getRepeatingClass(repeatingDays)}">
+const getEditTaskTemplate = (color, isFavorite, isDone, isDate, isRepeated, repeatingDays, title, dueDate, tags, picture, index) => {
+  return `<article class="card card--edit card--${color} ${getIsRepeatedTask(repeatingDays) ? ` card--repeat` : ``}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -208,17 +219,17 @@ const getEditTaskTemplate = (color, isFavorite, isDone, repeatingDays, title, du
         <div class="card__settings">
           <div class="card__details">
             <div class="card__dates">
-            ${getDateDeadlineButton()}
+            ${getDateDeadlineButton(isDate)}
 
-              <fieldset class="card__date-deadline">
+              <fieldset class="card__date-deadline" ${!isDate && `disabled`}>
                 ${getDateDeadlineFieldset(dueDate)}
               </fieldset>
 
-              ${getRepeatToggleButton()}
+              ${getRepeatToggleButton(isRepeated)}
 
-              <fieldset class="card__repeat-days" disabled>
+              <fieldset class="card__repeat-days" ${!isRepeated && `disabled`}>
                 <div class="card__repeat-days-inner">
-                  ${getRepeatingDaysControls(repeatingDays)}
+                  ${getRepeatingDaysControls(repeatingDays, index)}
                 </div>
               </fieldset>
             </div>
@@ -236,7 +247,7 @@ const getEditTaskTemplate = (color, isFavorite, isDone, repeatingDays, title, du
           <div class="card__colors-inner">
             <h3 class="card__colors-title">Color</h3>
             <div class="card__colors-wrap">
-              ${getColorsInput(color)}
+              ${getColorsInput(color, index)}
             </div>
           </div>
         </div>

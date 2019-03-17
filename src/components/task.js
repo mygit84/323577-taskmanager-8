@@ -17,6 +17,7 @@ export default class Task extends Component {
       isFavorite: data.isFavorite
     };
 
+    this._onEditButtonClick = this._onEditButtonClick.bind(this);
     this._onEdit = null;
   }
 
@@ -34,11 +35,19 @@ export default class Task extends Component {
 
   bind() {
     this._element.querySelector(`.card__btn--edit`)
-      .addEventListener(`click`, this._onEditButtonClick.bind(this));
+      .addEventListener(`click`, this._onEditButtonClick);
   }
 
   unbind() {
     this._element.querySelector(`.card__btn--edit`)
       .removeEventListener(`click`, this._onEditButtonClick);
+  }
+
+  update(data) {
+    this._title = data.title;
+    this._tags = data.tags;
+    this._color = data.color;
+    this._dueDate = data.dueDate;
+    this._repeatingDays = data.repeatingDays;
   }
 }
